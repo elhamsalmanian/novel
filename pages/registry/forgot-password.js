@@ -60,7 +60,7 @@ export default function ForgotPassword() {
                             </Button>
                         </FormGroup>
                         <FormGroup className="mr-auto text-left mt-5 link-gray">
-                            <Link href="/registry/login" className="txt-gray">
+                            <Link href="/" className="txt-gray">
                                 Remember Password?
                             </Link>
                         </FormGroup>

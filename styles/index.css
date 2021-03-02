@@ -25,7 +25,7 @@ a:hover{
   transition: color 300ms ease;
 }
 .btn-purple {
-  background-color: #462d7d !important;
+  background-color: #e2ac66 !important;
   transition: border 300ms ease;
 }
 .btn-purple:hover , .btn-purple:active , .btn-purple:focus , .btn-purple:not(:disabled){
