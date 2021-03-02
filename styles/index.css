@@ -73,18 +73,18 @@ a:hover{
   color: #462d7d !important;
 }
 .bg-purple {
-  background-color: #462d7d !important;
+  background-color: #e2ac66 !important;
 }
 .ant-table-cell:nth-child(3){
   text-align: center !important;
 }
 .ant-table-thead tr th {
-  background: #462d7d !important;
+  background: #e2ac66 !important;
   color: #fff !important;
 }
 .ant-pagination-item-active {
   border-color: #462d7d !important;
-  background-color: #462d7d !important;
+  background-color: #e2ac66 !important;
   color: #fff !important;
   border-radius: 50% !important;
 }
@@ -95,7 +95,7 @@ a:hover{
   background: transparent !important;
 }
 .ant-layout-sider-trigger{
-  background: #462d7d !important;
+  background: #e2ac66 !important;
 }
 .ant-layout-sider-trigger svg{
   font-size: 25px;
