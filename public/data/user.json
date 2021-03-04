@@ -1,7 +1,1 @@
-{
-  "users": [
-    {"name": "nava", "email": "nava@gmail.com", "password": "12345678"},
-    {"name": "elham", "email": "elham.salmanian@gmail.com", "password": "87654321"},
-    {"name": "mahan", "email": "mahan@gmail.com", "password": "11111111"}
-  ]
-}
+{"users":[{"name":"nava","email":"nava@gmail.com","password":"12345678"},{"name":"elham","email":"elham.salmanian@gmail.com","password":"87654321"},{"name":"mahan","email":"mahan@gmail.com","password":"11111111"},{"username":"Elie","email":"elham.salmanian@gmail.com","password":"12345678"},{"username":"Elie","email":"elham.salmanian@gmail.com","password":"12345678"},{"username":"Elie","email":"elham.salmanian@gmail.com","password":"12345678"},{"username":"Elie","email":"elham.salmanian@gmail.com","password":"12345678"},{"username":"Elie","email":"elham.salmanian@gmail.com","password":"12345678"},{"username":"Elie","email":"elham.salmanian@gmail.com","password":"12345678"}]}

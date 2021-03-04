@@ -1,3 +1,4 @@
+
 import React, {useContext, useEffect} from "react";
 import Context from "../context/context";
 import {Container, Row, Col, FormGroup, FormFeedback, Alert} from "reactstrap";
@@ -9,89 +10,111 @@ import {Request} from "../fetch/request";
 import Link from "next/link";
 import {EyeTwoTone, EyeInvisibleOutlined} from "@ant-design/icons";
 
-export default function Login() {
-    const {errors, handleSubmit, register, setError, reset, setValue} = useForm();
-    const {loading, dispatch, error} = useContext(Context);
-    const { push } = useRouter()
-    console.log(errors);
-    const handleChange = e => {
-        setValue(e.target.name, e.target.value);
+export default function Signup() {
+  const {errors, register, handleSubmit, setError, reset, setValue} = useForm();
+  const {loading, error, dispatch} = useContext(Context);
+  const { push } = useRouter()
+   
+  const handleChange = e => {
+    setValue(e.target.name, e.target.value);
+  };
+  const submit = async data => {
+    if (!data.username) {
+      return setError("username", {message: "username is required"});
+
+    }
+    if (!data.email) return setError("email", { message : "email is required" });
+    if (data?.password !== data?.repeat_password) {
+      setError("password", {message: ""});
+      setError("repeat_password", {message: "The Password and Confirmation Password is not match!"});
+      return false
+    } else if (data?.password?.length < 8) {
+      setError("password", {message: "Password length is less than eight"});
+      return false
+    } else {
+      console.log(data);
+      delete data.repeat_password;
+      dispatch({type: A.SIGN_UP_START});
+      await Request("POST", "/api/signup", data)
+      .then(res => {
+        console.log(data);       
+          dispatch({type: A.SIGN_UP_SUCCESS, payload: res.data});
+          push("/registry/login")
+        })
+        .catch(err => {
+          console.log(err);
+          dispatch({type: A.SIGN_UP_FAIL, payload: {message: err.message}});
+        });
+    }
+  };
+  useEffect(()=>{
+    register("username");
+    register("email");
+    register("password");
+    register("repeat_password");
+    },[register])
+  useEffect(() => {
+    return () => {
+      reset();
+      dispatch({type: A.FORM_RESET});
     };
-    const submit = async data => {
-        if (!data.email) return setError("email", {message: "email is required"});
-        if (!data.password) return setError("password", {message: "password is required"});
-        if(data.password.length <= 7) return setError("password" , { message : "password length must be greater than 7" })
-        dispatch({type: A.LOGIN_START});
-        await Request("POST", "/api/login", data)
-            .then(res => {
-                console.log(res);
-                if(res.data.success){
-                    message.success(res.data.message);
-                    localStorage.setItem("bearer" , res.data.bearer);
-                    dispatch({type: A.LOGIN_SUCCESS, payload: res.data.info});
-                    push("/home/users");
-                }else{
-                    message.error(res.data.message);
-                    dispatch({type: A.LOGIN_FAIL, payload: {message: res.data.message}});
-                }
-            })
-            .catch((err) => {
-                console.log(err);
-                dispatch({type: A.LOGIN_FAIL, payload: {message: "Error While Sending"}});
-            });
-    };
-    useEffect(() => {
-        register("email");
-        register("password");
-    }, [register]);
-    useEffect(() => {
-        return () => {
-            reset();
-            dispatch({type: A.FORM_RESET});
-        };
-    }, []);
-    return (
-        <Container fluid className="h-100">
-            <Col xs={12} md={9} sm={12} xl={6} className="d-flex flex-column p-2 p-md-5 h-100 align-items-center mx-auto justify-content-center">
-                <FormGroup className="w-50 mx-auto d-flex justify-content-center mb-5">
+  }, []);
+  return (
+    <Container fluid>
+      <Row className={"flex align-items-center pt-5"}>
+        <Col sm={12} md={6} xl={5} className={"m-auto py-5 shadow px-5 rounded-10"}>
+        <FormGroup className="w-50 mx-auto d-flex justify-content-center mb-5">
                     <img src={"/assets/images/logo.png"} className="h-100 mx-auto w-75" />
                 </FormGroup>
-                <FormGroup>{error.active && <Alert color="danger">{error.message}</Alert>}</FormGroup>
-                <form onSubmit={handleSubmit(submit)} className={"px-3 px-md-5 w-100 pb-2"}>
-                    <FormGroup>
-                        <Input style={{ height : '35px' }} id={"email"} name={"email"} className={"hov-purple"} onChange={handleChange} placeholder={"Email"} />
-                        <FormFeedback className={"d-block"}>{errors.email?.message}</FormFeedback>
-                    </FormGroup>
-                    <FormGroup>
-                        <Input.Password
-                            style={{ height : '35px' }}
-                            iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
-                            className={"hov-purple"}
-                            id={"password"}
-                            name={"password"}
-                            onChange={handleChange}
-                            placeholder={"Password"}
-                        />
-                        <FormFeedback className={"d-block"}>{errors.password?.message}</FormFeedback>
-                    </FormGroup>
-
-                    <FormGroup className={"mt-5"}>
-                        <Button
-                            style={{height: "40px"}}
-                            className={"d-block w-100 btn-purple text-white font-weight-bold"}
-                            htmlType={"submit"}
-                            loading={loading}
-                        >
-                            Login
-                        </Button>
-                    </FormGroup>
-                    <FormGroup className={"d-flex mt-5 align-items-center w-100 link-gray"}>
-                        <Link href={"/registry/forgot-password"}>
-                            Forgot Password!
-                        </Link>
-                    </FormGroup>
-                </form>
-            </Col>
-        </Container>
-    );
+          <FormGroup>{error.active && <Alert color="danger">{error.message}</Alert>}</FormGroup>
+          <form onSubmit={handleSubmit(submit)}>
+          
+            <FormGroup>
+              <Input onChange={handleChange} name={"email"} placeholder={"Email"} className={"hov-purple"} />
+              <FormFeedback className={"d-block"}> {errors.email?.message} </FormFeedback>
+            </FormGroup>
+            <FormGroup>
+              <Input onChange={handleChange} name={"username"} placeholder={"Username"} className={"hov-purple"} />
+              <FormFeedback className={"d-block"}> {errors.username?.message} </FormFeedback>
+            </FormGroup>
+            <FormGroup>
+              <Input.Password
+                onChange={handleChange}
+                iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+                name={"password"}
+                type={"password"}
+                placeholder={"Password"}
+                className={"hov-purple"}
+              />
+              <FormFeedback className={"d-block"}> {errors.password?.message} </FormFeedback>
+            </FormGroup>
+            <FormGroup>
+              <Input.Password
+                onChange={handleChange}
+                iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+                name={"repeat_password"}
+                type={"password"}
+                placeholder={"Confirm Password"}
+                className={"hov-purple"}
+              />
+              <FormFeedback className={"d-block"}> {errors.repeat_password?.message} </FormFeedback>
+            </FormGroup>
+            <FormGroup className={"d-flex align-items-center w-100"}>
+              <Link href={"/login"} className={"txt-gray"}>Already Have an Account!</Link>
+            </FormGroup>
+            <FormGroup>
+              <Button htmlType={"submit"} loading={loading} className={"btn-block btn-purple text-white"}>
+                Sign Up
+              </Button>
+            </FormGroup>
+            <FormGroup className={"d-flex mt-5 align-items-center w-100 link-gray"}>
+                <Link href={"/registry/login"}>
+                    Have already account!
+                </Link> 
+            </FormGroup>
+          </form>
+        </Col>
+      </Row>
+    </Container>
+  );
 }
